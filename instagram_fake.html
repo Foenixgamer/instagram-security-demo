@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram - Verificación de Seguridad</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-box {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px 40px;
+            text-align: center;
+            max-width: 350px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .logo {
+            width: 180px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #262626;
+            font-size: 18px;
+        }
+        p {
+            color: #8e8e8e;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 8px;
+            background-color: #0095f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .flag {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png" class="logo" alt="Instagram">
+        <h2>Verificación de Seguridad Requerida</h2>
+        <p>Por favor, inicia sesión para confirmar tu identidad y evitar la suspensión de tu cuenta.</p>
+        
+        <input type="text" id="username" placeholder="Usuario o correo electrónico">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="checkPhishing()">Iniciar Sesión</button>
+        
+        <!-- Mensaje de error si no dan razones válidas -->
+        <p id="error" class="error">¡Debes ingresar al menos 2 razones válidas!</p>
+        
+        <!-- Aquí se revelará la FLAG -->
+        <div id="flag" class="flag">
+            ¡FLAG ENCONTRADA: <strong>INGE_SOCIAL_PHISH_123</strong>!<br>
+            Razones correctas: <span id="validReasons"></span>
+        </div>
+    </div>
+
+    <script>
+        // Razones válidas de phishing (para comparar)
+        const validReasons = [
+            "dominio falso",
+            "dominio",
+            "url sospechosa",
+            "falta de https",
+            "errores gramaticales",
+            "gramatica",
+            "tono urgente",
+            "tono apresurado",
+            "remitente desconocido",
+            "dominio falso",
+            "logo de baja calidad"
+        ];
+
+        function checkPhishing() {
+            const userReasons = prompt(
+                "Esta página es falsa. ¿Qué señales de phishing detectaste?\n" +
+                "Escribe al menos 2 razones separadas por comas:"
+            ).toLowerCase().split(',').map(reason => reason.trim());
+
+            // Filtra solo las razones válidas
+            const matchedReasons = userReasons.filter(reason => 
+                validReasons.some(valid => reason.includes(valid))
+            );
+
+            const flagDiv = document.getElementById("flag");
+            const errorDiv = document.getElementById("error");
+
+            if (matchedReasons.length >= 2) {
+                // Mostrar FLAG y razones válidas
+                document.getElementById("validReasons").textContent = matchedReasons.join(', ');
+                flagDiv.style.display = "block";
+                errorDiv.style.display = "none";
+            } else {
+                // Mostrar error
+                errorDiv.style.display = "block";
+                flagDiv.style.display = "none";
+                alert("¡No es suficiente! Busca señales.");
+            }
+        }
+    </script>
+</body>
+</html>
